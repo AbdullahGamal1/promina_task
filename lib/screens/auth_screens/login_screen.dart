@@ -1,21 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:promina_task/cubit/my_cubit.dart';
 
 import '../components/custom_form_filed.dart';
+import '../components/helper.dart';
 import '../home_acreen/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = "LoginScreen";
 
   LoginScreen({super.key});
+
   GlobalKey<FormState> formKey = GlobalKey();
+  String? email;
+  String? password;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MyCubit, MyState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          Navigator.pushNamed(context, HomeScreen.routeName, arguments: email);
+        } else if (state is LoginError) {
+          showMyDialog(context: context, title: 'Error', content: state.error);
+        }
+      },
       builder: (context, state) => Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
@@ -100,6 +111,9 @@ class LoginScreen extends StatelessWidget {
                                   width: double.infinity,
                                   child: CustomFormField(
                                     hintText: 'User Name ',
+                                    onChange: (text) {
+                                      email = text;
+                                    },
                                   ),
                                 ),
                                 SizedBox(height: 10.h),
@@ -107,37 +121,41 @@ class LoginScreen extends StatelessWidget {
                                   width: double.infinity,
                                   child: CustomFormField(
                                     hintText: 'Password ',
+                                    onChange: (text) {
+                                      password = text;
+                                    },
                                     isPassword: true,
                                   ),
                                 ),
                                 SizedBox(height: 20.h),
                                 InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     if (formKey.currentState!.validate()) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => HomeScreen(),
-                                          ));
+                                      return BlocProvider.of<MyCubit>(context)
+                                          .loginUser(
+                                              email: email!,
+                                              password: password!);
                                     }
                                   },
                                   child: Container(
                                     height: 30.h,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                        color: Colors.blueAccent,
-                                        borderRadius: BorderRadius.circular(8)),
+                                      color: Colors.blueAccent,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                     child: const Center(
                                       child: Text(
                                         'SUBMIT',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
