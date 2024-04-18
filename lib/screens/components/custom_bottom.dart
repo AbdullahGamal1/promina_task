@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class CustomBottom extends StatelessWidget {
   final String title;
   final IconData icon;
-  final Color backgrounIcondColor;
+  final Color backgroundIcondColor;
+  final Color backgroundBottomColor;
 
   final TextStyle? textStyle;
   final Function() onTap;
@@ -12,7 +13,8 @@ class CustomBottom extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
-    required this.backgrounIcondColor,
+    required this.backgroundIcondColor,
+    required this.backgroundBottomColor,
     this.textStyle,
     required this.onTap,
   });
@@ -23,7 +25,8 @@ class CustomBottom extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: Colors.white),
+            borderRadius: BorderRadius.circular(10),
+            color: backgroundBottomColor),
         child: Row(
           children: [
             Container(
@@ -31,9 +34,10 @@ class CustomBottom extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: backgrounIcondColor),
+                    color: backgroundIcondColor),
                 child: Icon(
                   icon,
+                  color: Colors.white,
                 )),
             Text(
               title,
