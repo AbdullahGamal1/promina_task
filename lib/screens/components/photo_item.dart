@@ -15,6 +15,9 @@ class PhotoItem extends StatelessWidget {
       child: Image.network(
         imageUrl,
         fit: BoxFit.fill,
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(Icons.error);
+        },
       ),
     );
   }

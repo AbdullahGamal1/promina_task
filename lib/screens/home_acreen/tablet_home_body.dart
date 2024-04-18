@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../cubit/my_cubit.dart';
 import '../components/custom_bottom.dart';
+import '../components/custom_image_picker_dialog.dart';
 import '../components/custom_silver_grid.dart';
 
 class TabletHomeBody extends StatelessWidget {
@@ -9,6 +12,8 @@ class TabletHomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var myCubit = BlocProvider.of<MyCubit>(context);
+
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -33,7 +38,8 @@ class TabletHomeBody extends StatelessWidget {
                   SizedBox(
                     width: 80.w,
                     child: CustomBottom(
-                      backgrounIcondColor: Colors.redAccent,
+                      backgroundBottomColor: Colors.white,
+                      backgroundIcondColor: Colors.redAccent,
                       title: 'Log Out',
                       icon: Icons.arrow_back,
                       onTap: () {
@@ -45,32 +51,42 @@ class TabletHomeBody extends StatelessWidget {
                   SizedBox(
                     width: 80.w,
                     child: CustomBottom(
-                      backgrounIcondColor: Colors.redAccent,
+                      backgroundBottomColor: Colors.white,
+                      backgroundIcondColor: Colors.redAccent,
                       title: 'Upload',
                       icon: Icons.arrow_upward,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.transparent,
-                            elevation: 5,
-                            content: Column(
-                              children: [
-                                CustomBottom(
-                                  backgrounIcondColor: Colors.redAccent,
-                                  title: 'Gallery',
-                                  icon: Icons.photo_library,
-                                  onTap: () {},
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                CustomBottom(
-                                  backgrounIcondColor: Colors.redAccent,
-                                  title: 'Camera',
-                                  icon: Icons.photo_camera,
-                                  onTap: () {},
-                                )
-                              ],
-                            )));
+                        showMyUploadDialog(context,
+                            action: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomBottom(
+                                    backgroundBottomColor:
+                                        Colors.purple.shade100,
+                                    backgroundIcondColor: Colors.purpleAccent,
+                                    title: 'Gallery',
+                                    icon: Icons.photo_library,
+                                    onTap: () {
+                                      myCubit.pickImage();
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  CustomBottom(
+                                    backgroundBottomColor: Colors.cyan.shade50,
+                                    backgroundIcondColor: Colors.blueAccent,
+                                    title: 'Camera',
+                                    icon: Icons.photo_camera,
+                                    onTap: () {
+                                      myCubit.takeImageFromCamera();
+                                    },
+                                  )
+                                ],
+                              ),
+                            ));
                       },
                     ),
                   ),
